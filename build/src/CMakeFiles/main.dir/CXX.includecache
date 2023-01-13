@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/simplePID.hpp
+cmath
+-
+
+/home/shivam/adaptive-fuzzy-pid-auv/src/main.cpp
+iostream
+-
+simplePID.hpp
+/home/shivam/adaptive-fuzzy-pid-auv/src/simplePID.hpp
+
