@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/shivam/adaptive-fuzzy-pid-auv/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -78,16 +67,27 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shivam/adaptive-fuzzy-pid-auv/build/CMakeFiles /home/shivam/adaptive-fuzzy-pid-auv/build/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/shivam/adaptive-fuzzy-pid-auv/build/CMakeFiles /home/shivam/adaptive-fuzzy-pid-auv/build/controllers/CMakeFiles/progress.marks
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f CMakeFiles/Makefile2 controllers/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/shivam/adaptive-fuzzy-pid-auv/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f CMakeFiles/Makefile2 controllers/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,44 +97,60 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f CMakeFiles/Makefile2 controllers/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f CMakeFiles/Makefile2 controllers/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named main
+# Convenience name for target.
+controllers/CMakeFiles/controllers.dir/rule:
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f CMakeFiles/Makefile2 controllers/CMakeFiles/controllers.dir/rule
+.PHONY : controllers/CMakeFiles/controllers.dir/rule
 
-# Build rule for target.
-main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 main
-.PHONY : main
+# Convenience name for target.
+controllers: controllers/CMakeFiles/controllers.dir/rule
 
-# fast build rule for target.
-main/fast:
-	$(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/build
-.PHONY : main/fast
-
-#=============================================================================
-# Target rules for targets named controllers
-
-# Build rule for target.
-controllers: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 controllers
 .PHONY : controllers
 
 # fast build rule for target.
 controllers/fast:
-	$(MAKE) -f controllers/CMakeFiles/controllers.dir/build.make controllers/CMakeFiles/controllers.dir/build
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f controllers/CMakeFiles/controllers.dir/build.make controllers/CMakeFiles/controllers.dir/build
 .PHONY : controllers/fast
+
+src/simplePID.o: src/simplePID.cpp.o
+
+.PHONY : src/simplePID.o
+
+# target to build an object file
+src/simplePID.cpp.o:
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f controllers/CMakeFiles/controllers.dir/build.make controllers/CMakeFiles/controllers.dir/src/simplePID.cpp.o
+.PHONY : src/simplePID.cpp.o
+
+src/simplePID.i: src/simplePID.cpp.i
+
+.PHONY : src/simplePID.i
+
+# target to preprocess a source file
+src/simplePID.cpp.i:
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f controllers/CMakeFiles/controllers.dir/build.make controllers/CMakeFiles/controllers.dir/src/simplePID.cpp.i
+.PHONY : src/simplePID.cpp.i
+
+src/simplePID.s: src/simplePID.cpp.s
+
+.PHONY : src/simplePID.s
+
+# target to generate assembly for a file
+src/simplePID.cpp.s:
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(MAKE) -f controllers/CMakeFiles/controllers.dir/build.make controllers/CMakeFiles/controllers.dir/src/simplePID.cpp.s
+.PHONY : src/simplePID.cpp.s
 
 # Help Target
 help:
@@ -142,10 +158,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... main"
+	@echo "... rebuild_cache"
 	@echo "... controllers"
+	@echo "... src/simplePID.o"
+	@echo "... src/simplePID.i"
+	@echo "... src/simplePID.s"
 .PHONY : help
 
 
@@ -157,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/shivam/adaptive-fuzzy-pid-auv/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

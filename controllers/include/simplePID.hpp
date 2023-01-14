@@ -1,6 +1,10 @@
-#include<cmath>
+#ifndef PID_H
+#define PID_H
 
-class PID{
+#include<cmath>
+#include "controllers.hpp"
+
+class PID: public Controller{
 
     private:
         double kp, ki, kd, alpha, Ts;
@@ -13,3 +17,5 @@ class PID{
         static double calcAlphaEMA(double fn);
         double update(double ref, double pos);
 };
+
+#endif

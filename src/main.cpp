@@ -1,5 +1,6 @@
 #include<iostream>
 #include "simplePID.hpp"
+#include "controllers.hpp"
 
 int main(){
     double start, finish;
@@ -14,14 +15,16 @@ int main(){
     double vel = 0;
     int i = 1;
 
-    PID control = PID(0.707, -0.1, 1.68, 0.5, 0.1);
+    PID control = PID(0.707, 0.1, 1.68, 0.5, 0.1);
+    Controller * ptr;
+    ptr = &control;
 
     while(i < 500){
         double del = control.update(finish, start);
         vel += del*0.1;
         start += vel*0.1;
         err = finish - start;
-        std::cout << "At " << i*0.1 << " sec, pos=" << start << std::endl;
+        std::cout << "At " << i*0.1 << " sec, pos=" << start << " ,PID output=" << del << std::endl;
         i++;
     }
 }
