@@ -3,3 +3,4 @@ project(FuzzyControls VERSION 1.0.0)
 
 add_subdirectory(src)
 add_subdirectory(controllers)
+add_subdirectory(auv)

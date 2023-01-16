@@ -24,13 +24,7 @@ cmath
 controllers.hpp
 ../controllers/include/controllers.hpp
 
-/home/shivam/adaptive-fuzzy-pid-auv/src/main.cpp
-iostream
--
-simplePID.hpp
-/home/shivam/adaptive-fuzzy-pid-auv/src/simplePID.hpp
-controllers.hpp
-/home/shivam/adaptive-fuzzy-pid-auv/src/controllers.hpp
+/home/shivam/adaptive-fuzzy-pid-auv/auv/src/auv.cpp
 auv.hpp
-/home/shivam/adaptive-fuzzy-pid-auv/src/auv.hpp
+/home/shivam/adaptive-fuzzy-pid-auv/auv/src/auv.hpp
 

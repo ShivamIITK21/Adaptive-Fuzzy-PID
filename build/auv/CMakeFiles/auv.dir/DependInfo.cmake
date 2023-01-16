@@ -4,20 +4,19 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/shivam/adaptive-fuzzy-pid-auv/src/main.cpp" "/home/shivam/adaptive-fuzzy-pid-auv/build/src/CMakeFiles/main.dir/main.cpp.o"
+  "/home/shivam/adaptive-fuzzy-pid-auv/auv/src/auv.cpp" "/home/shivam/adaptive-fuzzy-pid-auv/build/auv/CMakeFiles/auv.dir/src/auv.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../controllers/include"
   "../auv/include"
+  "../controllers/include"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
   "/home/shivam/adaptive-fuzzy-pid-auv/build/controllers/CMakeFiles/controllers.dir/DependInfo.cmake"
-  "/home/shivam/adaptive-fuzzy-pid-auv/build/auv/CMakeFiles/auv.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

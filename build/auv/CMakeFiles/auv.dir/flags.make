@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/shivam/adaptive-fuzzy-pid-auv/controllers/include -I/home/shivam/adaptive-fuzzy-pid-auv/auv/include 
+CXX_INCLUDES = -I/home/shivam/adaptive-fuzzy-pid-auv/auv/include -I/home/shivam/adaptive-fuzzy-pid-auv/controllers/include 
 
