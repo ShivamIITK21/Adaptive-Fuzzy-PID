@@ -1,2 +1,0 @@
-/usr/bin/ar qc libauv.a  CMakeFiles/auv.dir/src/auv.cpp.o
-/usr/bin/ranlib libauv.a

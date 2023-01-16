@@ -1,2 +1,0 @@
-/usr/bin/ar qc libcontrollers.a  CMakeFiles/controllers.dir/src/simplePID.cpp.o
-/usr/bin/ranlib libcontrollers.a
