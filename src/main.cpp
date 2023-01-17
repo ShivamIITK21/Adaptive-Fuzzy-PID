@@ -45,4 +45,6 @@ int main(){
         std::cout << pid->x << " " << pid->y << " " << pid->z << " " << pid->phi << std::endl;
         i++;
     }
+
+    delete pid;
 }

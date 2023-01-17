@@ -53,3 +53,10 @@ void AUV::controlResponse(){
     fz = controlZ->update(refz, z);
     fphi = controlPhi->update(refphi, phi);
 }
+
+AUV::~AUV(){
+    delete controlX;
+    delete controlY;
+    delete controlZ;
+    delete controlPhi;
+}

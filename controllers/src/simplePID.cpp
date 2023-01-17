@@ -6,6 +6,8 @@ PID::PID(double _kp, double _ki, double _kd, double _fc, double _Ts){
     kd = _kd;
     alpha = calcAlphaEMA(_fc * _Ts);
     Ts = _Ts;
+    integral = 0;
+    old_ef = 0;
 }
 
 

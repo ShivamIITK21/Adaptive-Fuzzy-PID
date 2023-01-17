@@ -30,6 +30,8 @@ class AUV{
         void move();
         void accelerate();
         void controlResponse();
+
+        ~AUV();
 };
 
 #endif
