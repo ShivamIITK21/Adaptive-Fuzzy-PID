@@ -1,4 +1,28 @@
 #include "fuzzyPID.hpp"
+using namespace fl;
+
+void FuzzyPID::setMembershipFuncsInp(InputVariable * var, double start, double end){
+    // var->addTerm(new Triangle("NL", start, start,))
+    scalar p1 = start;
+    scalar p2 = (end-start)/6 + start;
+    scalar p3 = (end-start)/6 + p2;
+    scalar p4 = (end-start)/6 + p3;
+    scalar p5 = (end-start)/6 + p4;
+    scalar p6 = (end-start)/6 + p5;
+    scalar p7 = end;
+
+    var->addTerm(new Triangle("NL", p1, p1, p2));
+    var->addTerm(new Triangle("NM", p1, p2, p3));
+    var->addTerm(new Triangle("NS", p2, p3, p4));
+    var->addTerm(new Triangle("Z", p3, p4, p5));
+    var->addTerm(new Triangle("PS", p4, p5, p6));
+    var->addTerm(new Triangle("PM", p5, p6, p7));
+    var->addTerm(new Triangle("PL", p6, p7, p7));
+}
+
+void FuzzyPID::setMembershipFuncsOut(OutputVariable * var, double start, double end){
+    
+}
 
 FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double _Ts, gainRange _ranges){
     kp = _kp;
@@ -10,7 +34,7 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     derivative = 0;
     old_ef = 0;
 
-    using namespace fl;
+    
     engine = new Engine;
     engine->setName("Gain Controller");
     engine->setDescription("Controls kp, ki, kd");
@@ -20,19 +44,19 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     e->setDescription("");
     e->setEnabled(true);
     e->setRange(ranges.dele.first, ranges.dele.second);
-    e->setLockValueInRange(false);
+    e->setLockValueInRange(true);
+    setMembershipFuncsInp(e, ranges.dele.first, ranges.dele.second);
     engine->addInputVariable(e);
 
 
-    InputVariable * e = new InputVariable;
-    e->setName("Error Rate");
-    e->setDescription("");
-    e->setEnabled(true);
-    e->setRange(ranges.deledot.first, ranges.deledot.second);
-    e->setLockValueInRange(false);
-
-
-    engine->addInputVariable(e);
+    InputVariable * edot = new InputVariable;
+    edot->setName("Error Rate");
+    edot->setDescription("");
+    edot->setEnabled(true);
+    edot->setRange(ranges.deledot.first, ranges.deledot.second);
+    edot->setLockValueInRange(true);
+    setMembershipFuncsInp(edot, ranges.deledot.first, ranges.deledot.second);
+    engine->addInputVariable(edot);
     
     OutputVariable * dkp = new OutputVariable;
     dkp->setName("Delta Kp");
@@ -44,6 +68,7 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     dkp->setDefuzzifier(new Centroid(100));
     dkp->setDefaultValue(fl::nan);
     dkp->setLockPreviousValue(false);
+
 
     engine->addOutputVariable(dkp);
 
@@ -77,7 +102,7 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     engine->addOutputVariable(dkd);
 
 
-    
+
 
     
 }

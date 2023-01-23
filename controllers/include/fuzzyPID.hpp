@@ -27,6 +27,8 @@ class FuzzyPID: public Controller{
 
         double update(double ref, double pos);
         void updateGains();
+        void setMembershipFuncsInp(fl::InputVariable * var, double start, double end);
+        void setMembershipFuncsOut(fl::OutputVariable * var, double start, double end);
 };
 
 
