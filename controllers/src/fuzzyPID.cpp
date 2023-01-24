@@ -21,7 +21,24 @@ void FuzzyPID::setMembershipFuncsInp(InputVariable * var, double start, double e
 }
 
 void FuzzyPID::setMembershipFuncsOut(OutputVariable * var, double start, double end){
-    
+    scalar p1 = start;
+    scalar p2 = (end-start)/6 + start;
+    scalar p3 = (end-start)/6 + p2;
+    scalar p4 = (end-start)/6 + p3;
+    scalar p5 = (end-start)/6 + p4;
+    scalar p6 = (end-start)/6 + p5;
+    scalar p7 = end;
+
+    scalar width = (end-start)/10;
+    scalar slope = width*10;
+
+    var->addTerm(new Triangle("NL", p1, width, slope));
+    var->addTerm(new Triangle("NM", p2, width, slope));
+    var->addTerm(new Triangle("NS", p3, width, slope));
+    var->addTerm(new Triangle("Z", p4, width, slope));
+    var->addTerm(new Triangle("PS", p5, width, slope));
+    var->addTerm(new Triangle("PM", p6, width, slope));
+    var->addTerm(new Triangle("PL", p7, width, slope));
 }
 
 FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double _Ts, gainRange _ranges){
@@ -68,8 +85,7 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     dkp->setDefuzzifier(new Centroid(100));
     dkp->setDefaultValue(fl::nan);
     dkp->setLockPreviousValue(false);
-
-
+    setMembershipFuncsOut(dkp, ranges.delkp.first, ranges.delkp.second);
     engine->addOutputVariable(dkp);
 
 
@@ -83,10 +99,8 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     dki->setDefuzzifier(new Centroid(100));
     dki->setDefaultValue(fl::nan);
     dki->setLockPreviousValue(false);
-
+    setMembershipFuncsOut(dki, ranges.delki.first, ranges.delki.second);
     engine->addOutputVariable(dki);
-
-
 
     OutputVariable * dkd = new OutputVariable;
     dkd->setName("Delta Kp");
@@ -98,13 +112,9 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     dkd->setDefuzzifier(new Centroid(100));
     dkd->setDefaultValue(fl::nan);
     dkd->setLockPreviousValue(false);
-
+    setMembershipFuncsOut(dkd, ranges.delkd.first, ranges.delkd.second);
     engine->addOutputVariable(dkd);
 
-
-
-
-    
 }
 
 double FuzzyPID::update(double ref, double pos){
