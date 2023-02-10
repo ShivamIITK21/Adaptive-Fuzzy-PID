@@ -115,6 +115,7 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     setMembershipFuncsOut(dkd, ranges.delkd.first, ranges.delkd.second);
     engine->addOutputVariable(dkd);
 
+    //for kp
     RuleBlock * kpRules = new RuleBlock;
     kpRules->setName("kpRules");
     kpRules->setDescription("");
@@ -130,8 +131,178 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     kpRules->addRule(Rule::parse("if e is NL and edot is PS then dkp is PS", engine));
     kpRules->addRule(Rule::parse("if e is NL and edot is PM then dkp is Z", engine));
     kpRules->addRule(Rule::parse("if e is NL and edot is PL then dkp is Z", engine));
-    kpRules->addRule(Rule::parse("if obstacle is right then mSteer is left", engine));
+
+    kpRules->addRule(Rule::parse("if e is NM and edot is NL then dkp is PL", engine));
+    kpRules->addRule(Rule::parse("if e is NM and edot is NM then dkp is PL", engine));
+    kpRules->addRule(Rule::parse("if e is NM and edot is NS then dkp is PM", engine)),
+    kpRules->addRule(Rule::parse("if e is NM and edot is Z then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is NM and edot is PS then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is NM and edot is PM then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is NM and edot is PL then dkp is NS", engine));
+
+    kpRules->addRule(Rule::parse("if e is NS and edot is NL then dkp is PM", engine));
+    kpRules->addRule(Rule::parse("if e is NS and edot is NM then dkp is PM", engine));
+    kpRules->addRule(Rule::parse("if e is NS and edot is NS then dkp is PM", engine)),
+    kpRules->addRule(Rule::parse("if e is NS and edot is Z then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is NS and edot is PS then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is NS and edot is PM then dkp is NS", engine));
+    kpRules->addRule(Rule::parse("if e is NS and edot is PL then dkp is NS", engine));
+
+    kpRules->addRule(Rule::parse("if e is Z and edot is NL then dkp is PM", engine));
+    kpRules->addRule(Rule::parse("if e is Z and edot is NM then dkp is PM", engine));
+    kpRules->addRule(Rule::parse("if e is Z and edot is NS then dkp is PS", engine)),
+    kpRules->addRule(Rule::parse("if e is Z and edot is Z then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is Z and edot is PS then dkp is NS", engine));
+    kpRules->addRule(Rule::parse("if e is Z and edot is PM then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is Z and edot is PL then dkp is NM", engine));
+
+    kpRules->addRule(Rule::parse("if e is PS and edot is NL then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is PS and edot is NM then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is PS and edot is NS then dkp is Z", engine)),
+    kpRules->addRule(Rule::parse("if e is PS and edot is Z then dkp is NS", engine));
+    kpRules->addRule(Rule::parse("if e is PS and edot is PS then dkp is NS", engine));
+    kpRules->addRule(Rule::parse("if e is PS and edot is PM then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is PS and edot is PL then dkp is NM", engine));
+
+    kpRules->addRule(Rule::parse("if e is PM and edot is NL then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is PM and edot is NM then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is PM and edot is NS then dkp is NS", engine)),
+    kpRules->addRule(Rule::parse("if e is PM and edot is Z then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is PM and edot is PS then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is PM and edot is PM then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is PM and edot is PL then dkp is NL", engine));
+
+    kpRules->addRule(Rule::parse("if e is PL and edot is NL then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is PL and edot is NM then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is PL and edot is NS then dkp is NM", engine)),
+    kpRules->addRule(Rule::parse("if e is PL and edot is Z then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is PL and edot is PS then dkp is NM", engine));
+    kpRules->addRule(Rule::parse("if e is PL and edot is PM then dkp is NL", engine));
+    kpRules->addRule(Rule::parse("if e is PL and edot is PL then dkp is NL", engine));
+
     engine->addRuleBlock(kpRules);
+
+    // for ki
+
+    RuleBlock * kiRules = new RuleBlock;
+    kiRules->setName("kiRules");
+    kiRules->setDescription("");
+    kiRules->setEnabled(true);
+    kiRules->setConjunction(fl::null);
+    kiRules->setDisjunction(fl::null);
+    kiRules->setImplication(new AlgebraicProduct);
+    kiRules->setActivation(new General);
+    kiRules->addRule(Rule::parse("if e is NL and edot is NL then dki is NL", engine));
+    kiRules->addRule(Rule::parse("if e is NL and edot is NM then dki is NL", engine));
+    kiRules->addRule(Rule::parse("if e is NL and edot is NS then dki is NM", engine)),
+    kiRules->addRule(Rule::parse("if e is NL and edot is Z then dki is NM", engine));
+    kiRules->addRule(Rule::parse("if e is NL and edot is PS then dki is NS", engine));
+    kiRules->addRule(Rule::parse("if e is NL and edot is PM then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is NL and edot is PL then dki is Z", engine));
+
+    kiRules->addRule(Rule::parse("if e is NM and edot is NL then dki is NL", engine));
+    kiRules->addRule(Rule::parse("if e is NM and edot is NM then dki is NL", engine));
+    kiRules->addRule(Rule::parse("if e is NM and edot is NS then dki is NM", engine)),
+    kiRules->addRule(Rule::parse("if e is NM and edot is Z then dki is NS", engine));
+    kiRules->addRule(Rule::parse("if e is NM and edot is PS then dki is NS", engine));
+    kiRules->addRule(Rule::parse("if e is NM and edot is PM then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is NM and edot is PL then dki is Z", engine));
+
+    kiRules->addRule(Rule::parse("if e is NS and edot is NL then dki is NL", engine));
+    kiRules->addRule(Rule::parse("if e is NS and edot is NM then dki is NM", engine));
+    kiRules->addRule(Rule::parse("if e is NS and edot is NS then dki is NS", engine)),
+    kiRules->addRule(Rule::parse("if e is NS and edot is Z then dki is NS", engine));
+    kiRules->addRule(Rule::parse("if e is NS and edot is PS then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is NS and edot is PM then dki is PS", engine));
+    kiRules->addRule(Rule::parse("if e is NS and edot is PL then dki is PS", engine));
+
+    kiRules->addRule(Rule::parse("if e is Z and edot is NL then dki is NM", engine));
+    kiRules->addRule(Rule::parse("if e is Z and edot is NM then dki is NM", engine));
+    kiRules->addRule(Rule::parse("if e is Z and edot is NS then dki is NS", engine)),
+    kiRules->addRule(Rule::parse("if e is Z and edot is Z then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is Z and edot is PS then dki is PS", engine));
+    kiRules->addRule(Rule::parse("if e is Z and edot is PM then dki is PM", engine));
+    kiRules->addRule(Rule::parse("if e is Z and edot is PL then dki is PM", engine));
+
+    kiRules->addRule(Rule::parse("if e is PS and edot is NL then dki is NM", engine));
+    kiRules->addRule(Rule::parse("if e is PS and edot is NM then dki is NS", engine));
+    kiRules->addRule(Rule::parse("if e is PS and edot is NS then dki is Z", engine)),
+    kiRules->addRule(Rule::parse("if e is PS and edot is Z then dki is PS", engine));
+    kiRules->addRule(Rule::parse("if e is PS and edot is PS then dki is PS", engine));
+    kiRules->addRule(Rule::parse("if e is PS and edot is PM then dki is PM", engine));
+    kiRules->addRule(Rule::parse("if e is PS and edot is PL then dki is PB", engine));
+
+    kiRules->addRule(Rule::parse("if e is PM and edot is NL then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is PM and edot is NM then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is PM and edot is NS then dki is PS", engine)),
+    kiRules->addRule(Rule::parse("if e is PM and edot is Z then dki is PS", engine));
+    kiRules->addRule(Rule::parse("if e is PM and edot is PS then dki is PM", engine));
+    kiRules->addRule(Rule::parse("if e is PM and edot is PM then dki is PL", engine));
+    kiRules->addRule(Rule::parse("if e is PM and edot is PL then dki is PB", engine));
+
+    engine->addRuleBlock(kiRules);
+
+    //for kd
+
+    RuleBlock * kdRules = new RuleBlock;
+    kdRules->setName("kdRules");
+    kdRules->setDescription("");
+    kdRules->setEnabled(true);
+    kdRules->setConjunction(fl::null);
+    kdRules->setDisjunction(fl::null);
+    kdRules->setImplication(new AlgebraicProduct);
+    kdRules->setActivation(new General);
+    kdRules->addRule(Rule::parse("if e is NL and edot is NL then dkd is PS", engine));
+    kdRules->addRule(Rule::parse("if e is NL and edot is NM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is NL and edot is NS then dkd is NL", engine)),
+    kdRules->addRule(Rule::parse("if e is NL and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is NL and edot is PS then dkd is NL", engine));
+    kdRules->addRule(Rule::parse("if e is NL and edot is PM then dkd is NM", engine));
+    kdRules->addRule(Rule::parse("if e is NL and edot is PL then dkd is PS", engine));
+
+    kdRules->addRule(Rule::parse("if e is NM and edot is NL then dkd is PS", engine));
+    kdRules->addRule(Rule::parse("if e is NM and edot is NM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is NM and edot is NS then dkd is NL", engine)),
+    kdRules->addRule(Rule::parse("if e is NM and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is NM and edot is PS then dkd is NM", engine));
+    kdRules->addRule(Rule::parse("if e is NM and edot is PM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is NM and edot is PL then dkd is Z", engine));
+
+    kdRules->addRule(Rule::parse("if e is NS and edot is NL then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is NS and edot is NM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is NS and edot is NS then dkd is NM", engine)),
+    kdRules->addRule(Rule::parse("if e is NS and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is NS and edot is PS then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is NS and edot is PM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is NS and edot is PL then dkd is Z", engine));
+
+    kdRules->addRule(Rule::parse("if e is Z and edot is NL then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is Z and edot is NM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is Z and edot is NS then dkd is NS", engine)),
+    kdRules->addRule(Rule::parse("if e is Z and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is Z and edot is PS then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is Z and edot is PM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is Z and edot is PL then dkd is Z", engine));
+
+    kdRules->addRule(Rule::parse("if e is PS and edot is NL then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PS and edot is NM then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PS and edot is NS then dkd is Z", engine)),
+    kdRules->addRule(Rule::parse("if e is PS and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PS and edot is PS then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PS and edot is PM then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PS and edot is PL then dkd is Z", engine));
+
+    kdRules->addRule(Rule::parse("if e is PM and edot is NL then dkd is PL", engine));
+    kdRules->addRule(Rule::parse("if e is PM and edot is NM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is PM and edot is NS then dkd is PS", engine)),
+    kdRules->addRule(Rule::parse("if e is PM and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PM and edot is PS then dkd is PS", engine));
+    kdRules->addRule(Rule::parse("if e is PM and edot is PM then dkd is PS", engine));
+    kdRules->addRule(Rule::parse("if e is PM and edot is PL then dkd is PL", engine));
+
+    engine->addRuleBlock(kdRules);
+    
+
 
     std::string status;
     if (not engine->isReady(&status))
