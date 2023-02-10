@@ -23,6 +23,12 @@ class FuzzyPID: public Controller{
         gainRange ranges;
         fl::Engine * engine;
 
+        fl::InputVariable * e;
+        fl::InputVariable * edot;
+        fl::OutputVariable * dkp;
+        fl::OutputVariable * dki;
+        fl::OutputVariable * dkd;
+
         FuzzyPID(std::string param, double _kp, double _ki, double _kd, double _Ts, gainRange _ranges);
 
         double update(double ref, double pos);

@@ -56,8 +56,8 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     engine->setName("Gain Controller");
     engine->setDescription("Controls kp, ki, kd");
 
-    InputVariable * e = new InputVariable;
-    e->setName("Error");
+    e = new InputVariable;
+    e->setName("e");
     e->setDescription("");
     e->setEnabled(true);
     e->setRange(ranges.dele.first, ranges.dele.second);
@@ -66,8 +66,8 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     engine->addInputVariable(e);
 
 
-    InputVariable * edot = new InputVariable;
-    edot->setName("Error Rate");
+    edot = new InputVariable;
+    edot->setName("edot");
     edot->setDescription("");
     edot->setEnabled(true);
     edot->setRange(ranges.deledot.first, ranges.deledot.second);
@@ -75,8 +75,8 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     setMembershipFuncsInp(edot, ranges.deledot.first, ranges.deledot.second);
     engine->addInputVariable(edot);
     
-    OutputVariable * dkp = new OutputVariable;
-    dkp->setName("Delta Kp");
+    dkp = new OutputVariable;
+    dkp->setName("dkp");
     dkp->setDescription("");
     dkp->setEnabled(true);
     dkp->setRange(ranges.delkp.first, ranges.delkp.second);
@@ -89,8 +89,8 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     engine->addOutputVariable(dkp);
 
 
-    OutputVariable * dki = new OutputVariable;
-    dki->setName("Delta Ki");
+    dki = new OutputVariable;
+    dki->setName("dki");
     dki->setDescription("");
     dki->setEnabled(true);
     dki->setRange(ranges.delki.first, ranges.delki.second);
@@ -102,8 +102,8 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     setMembershipFuncsOut(dki, ranges.delki.first, ranges.delki.second);
     engine->addOutputVariable(dki);
 
-    OutputVariable * dkd = new OutputVariable;
-    dkd->setName("Delta Kp");
+    dkd = new OutputVariable;
+    dkd->setName("dkd");
     dkd->setDescription("");
     dkd->setEnabled(true);
     dkd->setRange(ranges.delkd.first, ranges.delkd.second);
@@ -114,6 +114,28 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     dkd->setLockPreviousValue(false);
     setMembershipFuncsOut(dkd, ranges.delkd.first, ranges.delkd.second);
     engine->addOutputVariable(dkd);
+
+    RuleBlock * kpRules = new RuleBlock;
+    kpRules->setName("kpRules");
+    kpRules->setDescription("");
+    kpRules->setEnabled(true);
+    kpRules->setConjunction(fl::null);
+    kpRules->setDisjunction(fl::null);
+    kpRules->setImplication(new AlgebraicProduct);
+    kpRules->setActivation(new General);
+    kpRules->addRule(Rule::parse("if e is NL and edot is NL then dkp is PL", engine));
+    kpRules->addRule(Rule::parse("if e is NL and edot is NM then dkp is PL", engine));
+    kpRules->addRule(Rule::parse("if e is NL and edot is NS then dkp is PM", engine)),
+    kpRules->addRule(Rule::parse("if e is NL and edot is Z then dkp is PM", engine));
+    kpRules->addRule(Rule::parse("if e is NL and edot is PS then dkp is PS", engine));
+    kpRules->addRule(Rule::parse("if e is NL and edot is PM then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if e is NL and edot is PL then dkp is Z", engine));
+    kpRules->addRule(Rule::parse("if obstacle is right then mSteer is left", engine));
+    engine->addRuleBlock(kpRules);
+
+    std::string status;
+    if (not engine->isReady(&status))
+        throw Exception("[engine error] engine is not ready:\n" + status, FL_AT);
 
 }
 
@@ -127,6 +149,14 @@ double FuzzyPID::update(double ref, double pos){
     integral = new_integral;
     derivative = new_derivative;
     old_ef = error;
+
+    e->setValue(error);
+    edot->setValue(new_derivative);
+    engine->process();
+
+    kp += dkp->getValue();
+    ki += dki->getValue();
+    kd += dkd->getValue();
 
     return updated;    
 }
