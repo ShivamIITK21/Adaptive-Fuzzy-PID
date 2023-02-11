@@ -7,4 +7,11 @@ add_library(
     src/fuzzyPID.cpp
 )
 
+# set(FUZZYLITE_DIR "/home/shivam/fuzzylite/fuzzylite")
+
+target_include_directories(controllers PUBLIC ${FUZZYLITE_DIR})
+link_directories("${FUZZYLITE_DIR}/release/bin")
+
+target_link_libraries(controllers PUBLIC fuzzylite-static)
+
 target_include_directories(controllers PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")

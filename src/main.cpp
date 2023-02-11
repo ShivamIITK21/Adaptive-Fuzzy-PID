@@ -1,6 +1,7 @@
 #include<iostream>
 #include "simplePID.hpp"
 #include "controllers.hpp"
+#include "fuzzyPID.hpp"
 #include "auv.hpp"
 
 int main(){
@@ -29,22 +30,26 @@ int main(){
     //     i++;
     // }
 
-    gains X = {0.707, 0.1, 1.68, 0.5};
-    gains Y = {0.70, 0.1, 1.68, 0.5};
-    gains Z = {0.707, 0.1, 1.6, 0.5};
-    gains Phi = {0.707, 0.1, 1.68, 0.4};
+    // gains X = {0.707, 0.1, 1.68, 0.5};
+    // gains Y = {0.70, 0.1, 1.68, 0.5};
+    // gains Z = {0.707, 0.1, 1.6, 0.5};
+    // gains Phi = {0.707, 0.1, 1.68, 0.4};
 
 
-    AUV * pid = new AUV("PID", 0, 0, 0, 0, 0.1, X, Y, Z, Phi, 10, 50, 43, 2.16);
+    // AUV * pid = new AUV("PID", 0, 0, 0, 0, 0.1, X, Y, Z, Phi, 10, 50, 43, 2.16);
     
-    int i = 1;
-    while(i < 500){
-        pid->controlResponse();
-        pid->accelerate();
-        pid->move();
-        std::cout << pid->x << " " << pid->y << " " << pid->z << " " << pid->phi << std::endl;
-        i++;
-    }
+    // int i = 1;
+    // while(i < 500){
+    //     pid->controlResponse();
+    //     pid->accelerate();
+    //     pid->move();
+    //     std::cout << pid->x << " " << pid->y << " " << pid->z << " " << pid->phi << std::endl;
+    //     i++;
+    // }
 
-    delete pid;
+    gainRange range = {{0,1},{0,1},{0,1},{0,1},{0,1}};
+
+    FuzzyPID * control = new FuzzyPID(1,2,3,0.1,range);
+
+    // delete pid;
 }

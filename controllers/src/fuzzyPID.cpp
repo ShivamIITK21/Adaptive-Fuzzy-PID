@@ -11,13 +11,13 @@ void FuzzyPID::setMembershipFuncsInp(InputVariable * var, double start, double e
     scalar p6 = (end-start)/6 + p5;
     scalar p7 = end;
 
-    var->addTerm(new Triangle("NL", p1, p1, p2));
-    var->addTerm(new Triangle("NM", p1, p2, p3));
-    var->addTerm(new Triangle("NS", p2, p3, p4));
-    var->addTerm(new Triangle("Z", p3, p4, p5));
-    var->addTerm(new Triangle("PS", p4, p5, p6));
-    var->addTerm(new Triangle("PM", p5, p6, p7));
-    var->addTerm(new Triangle("PL", p6, p7, p7));
+    var->addTerm(new fl::Triangle("NL", p1, p1, p2));
+    var->addTerm(new fl::Triangle("NM", p1, p2, p3));
+    var->addTerm(new fl::Triangle("NS", p2, p3, p4));
+    var->addTerm(new fl::Triangle("Z", p3, p4, p5));
+    var->addTerm(new fl::Triangle("PS", p4, p5, p6));
+    var->addTerm(new fl::Triangle("PM", p5, p6, p7));
+    var->addTerm(new fl::Triangle("PL", p6, p7, p7));
 }
 
 void FuzzyPID::setMembershipFuncsOut(OutputVariable * var, double start, double end){
@@ -32,16 +32,16 @@ void FuzzyPID::setMembershipFuncsOut(OutputVariable * var, double start, double 
     scalar width = (end-start)/10;
     scalar slope = width*10;
 
-    var->addTerm(new Triangle("NL", p1, width, slope));
-    var->addTerm(new Triangle("NM", p2, width, slope));
-    var->addTerm(new Triangle("NS", p3, width, slope));
-    var->addTerm(new Triangle("Z", p4, width, slope));
-    var->addTerm(new Triangle("PS", p5, width, slope));
-    var->addTerm(new Triangle("PM", p6, width, slope));
-    var->addTerm(new Triangle("PL", p7, width, slope));
+    var->addTerm(new Bell("NL", p1, width, slope));
+    var->addTerm(new Bell("NM", p2, width, slope));
+    var->addTerm(new Bell("NS", p3, width, slope));
+    var->addTerm(new Bell("Z", p4, width, slope));
+    var->addTerm(new Bell("PS", p5, width, slope));
+    var->addTerm(new Bell("PM", p6, width, slope));
+    var->addTerm(new Bell("PL", p7, width, slope));
 }
 
-FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double _Ts, gainRange _ranges){
+FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ranges){
     kp = _kp;
     ki = _ki;
     kd = _kd;
@@ -301,7 +301,7 @@ FuzzyPID::FuzzyPID(std::string param, double _kp, double _ki, double _kd, double
     kdRules->addRule(Rule::parse("if e is PM and edot is PL then dkd is PL", engine));
 
     engine->addRuleBlock(kdRules);
-    
+
 
 
     std::string status;

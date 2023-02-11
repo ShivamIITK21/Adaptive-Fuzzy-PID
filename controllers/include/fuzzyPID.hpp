@@ -4,7 +4,7 @@
 #include "controllers.hpp"
 #include "fl/Headers.h"
 #include<utility>
-
+using namespace fl;
 typedef struct gainRange{
     std::pair<double, double> deledot;
     std::pair<double, double> dele;
@@ -29,12 +29,12 @@ class FuzzyPID: public Controller{
         fl::OutputVariable * dki;
         fl::OutputVariable * dkd;
 
-        FuzzyPID(std::string param, double _kp, double _ki, double _kd, double _Ts, gainRange _ranges);
+        FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ranges);
 
         double update(double ref, double pos);
         void updateGains();
-        void setMembershipFuncsInp(fl::InputVariable * var, double start, double end);
-        void setMembershipFuncsOut(fl::OutputVariable * var, double start, double end);
+        void setMembershipFuncsInp(InputVariable * var, double start, double end);
+        void setMembershipFuncsOut(OutputVariable * var, double start, double end);
 };
 
 
