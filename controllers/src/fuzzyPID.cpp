@@ -61,7 +61,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     e->setDescription("");
     e->setEnabled(true);
     e->setRange(ranges.dele.first, ranges.dele.second);
-    e->setLockValueInRange(true);
+    e->setLockValueInRange(false);
     setMembershipFuncsInp(e, ranges.dele.first, ranges.dele.second);
     engine->addInputVariable(e);
 
@@ -71,7 +71,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     edot->setDescription("");
     edot->setEnabled(true);
     edot->setRange(ranges.deledot.first, ranges.deledot.second);
-    edot->setLockValueInRange(true);
+    edot->setLockValueInRange(false);
     setMembershipFuncsInp(edot, ranges.deledot.first, ranges.deledot.second);
     engine->addInputVariable(edot);
     
@@ -80,7 +80,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     dkp->setDescription("");
     dkp->setEnabled(true);
     dkp->setRange(ranges.delkp.first, ranges.delkp.second);
-    dkp->setLockValueInRange(true);
+    dkp->setLockValueInRange(false);
     dkp->setAggregation(new Maximum);
     dkp->setDefuzzifier(new Centroid(100));
     dkp->setDefaultValue(fl::nan);
@@ -94,7 +94,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     dki->setDescription("");
     dki->setEnabled(true);
     dki->setRange(ranges.delki.first, ranges.delki.second);
-    dki->setLockValueInRange(true);
+    dki->setLockValueInRange(false);
     dki->setAggregation(new Maximum);
     dki->setDefuzzifier(new Centroid(100));
     dki->setDefaultValue(fl::nan);
@@ -107,7 +107,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     dkd->setDescription("");
     dkd->setEnabled(true);
     dkd->setRange(ranges.delkd.first, ranges.delkd.second);
-    dkd->setLockValueInRange(true);
+    dkd->setLockValueInRange(false);
     dkd->setAggregation(new Maximum);
     dkd->setDefuzzifier(new Centroid(100));
     dkd->setDefaultValue(fl::nan);
@@ -120,7 +120,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     kpRules->setName("kpRules");
     kpRules->setDescription("");
     kpRules->setEnabled(true);
-    kpRules->setConjunction(fl::null);
+    kpRules->setConjunction(new Minimum);
     kpRules->setDisjunction(fl::null);
     kpRules->setImplication(new AlgebraicProduct);
     kpRules->setActivation(new General);
@@ -188,7 +188,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     kiRules->setName("kiRules");
     kiRules->setDescription("");
     kiRules->setEnabled(true);
-    kiRules->setConjunction(fl::null);
+    kiRules->setConjunction(new Minimum);
     kiRules->setDisjunction(fl::null);
     kiRules->setImplication(new AlgebraicProduct);
     kiRules->setActivation(new General);
@@ -230,7 +230,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     kiRules->addRule(Rule::parse("if e is PS and edot is Z then dki is PS", engine));
     kiRules->addRule(Rule::parse("if e is PS and edot is PS then dki is PS", engine));
     kiRules->addRule(Rule::parse("if e is PS and edot is PM then dki is PM", engine));
-    kiRules->addRule(Rule::parse("if e is PS and edot is PL then dki is PB", engine));
+    kiRules->addRule(Rule::parse("if e is PS and edot is PL then dki is PM", engine));
 
     kiRules->addRule(Rule::parse("if e is PM and edot is NL then dki is Z", engine));
     kiRules->addRule(Rule::parse("if e is PM and edot is NM then dki is Z", engine));
@@ -238,7 +238,15 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     kiRules->addRule(Rule::parse("if e is PM and edot is Z then dki is PS", engine));
     kiRules->addRule(Rule::parse("if e is PM and edot is PS then dki is PM", engine));
     kiRules->addRule(Rule::parse("if e is PM and edot is PM then dki is PL", engine));
-    kiRules->addRule(Rule::parse("if e is PM and edot is PL then dki is PB", engine));
+    kiRules->addRule(Rule::parse("if e is PM and edot is PL then dki is PL", engine));
+
+    kiRules->addRule(Rule::parse("if e is PL and edot is NL then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is PL and edot is NM then dki is Z", engine));
+    kiRules->addRule(Rule::parse("if e is PL and edot is NS then dki is PS", engine)),
+    kiRules->addRule(Rule::parse("if e is PL and edot is Z then dki is PS", engine));
+    kiRules->addRule(Rule::parse("if e is PL and edot is PS then dki is PM", engine));
+    kiRules->addRule(Rule::parse("if e is PL and edot is PM then dki is PL", engine));
+    kiRules->addRule(Rule::parse("if e is PL and edot is PL then dki is PL", engine));
 
     engine->addRuleBlock(kiRules);
 
@@ -248,7 +256,7 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     kdRules->setName("kdRules");
     kdRules->setDescription("");
     kdRules->setEnabled(true);
-    kdRules->setConjunction(fl::null);
+    kdRules->setConjunction(new Minimum);
     kdRules->setDisjunction(fl::null);
     kdRules->setImplication(new AlgebraicProduct);
     kdRules->setActivation(new General);
@@ -300,6 +308,14 @@ FuzzyPID::FuzzyPID(double _kp, double _ki, double _kd, double _Ts, gainRange _ra
     kdRules->addRule(Rule::parse("if e is PM and edot is PM then dkd is PS", engine));
     kdRules->addRule(Rule::parse("if e is PM and edot is PL then dkd is PL", engine));
 
+    kdRules->addRule(Rule::parse("if e is PL and edot is NL then dkd is PL", engine));
+    kdRules->addRule(Rule::parse("if e is PL and edot is NM then dkd is NS", engine));
+    kdRules->addRule(Rule::parse("if e is PL and edot is NS then dkd is PS", engine)),
+    kdRules->addRule(Rule::parse("if e is PL and edot is Z then dkd is Z", engine));
+    kdRules->addRule(Rule::parse("if e is PL and edot is PS then dkd is PS", engine));
+    kdRules->addRule(Rule::parse("if e is PL and edot is PM then dkd is PS", engine));
+    kdRules->addRule(Rule::parse("if e is PL and edot is PL then dkd is PL", engine));
+
     engine->addRuleBlock(kdRules);
 
 
@@ -325,9 +341,15 @@ double FuzzyPID::update(double ref, double pos){
     edot->setValue(new_derivative);
     engine->process();
 
-    kp += dkp->getValue();
-    ki += dki->getValue();
-    kd += dkd->getValue();
+    kp += (dkp->getValue() == dkp->getValue()) ? dkp->getValue() : 0;
+    ki += (dki->getValue() == dki->getValue()) ? dki->getValue() : 0;
+    kd += (dkd->getValue() == dkd->getValue()) ? dkd->getValue() : 0;
+
+    // FL_LOG(engine->toString());
+
+    std::cout << kp << " " << ki << " " << kd << '\n';
+
+    std::cout << updated << '\n';
 
     return updated;    
 }
